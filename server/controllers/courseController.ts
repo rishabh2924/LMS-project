@@ -87,7 +87,7 @@ export const getSignleCourse = CatchAsyncError(
           "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
         );
 
-        await redis.set(courseId, JSON.stringify(course));
+        await redis.set(courseId, JSON.stringify(course),"EX", 60 * 60 * 24*7);
 
         res.status(200).json({
           success: true,
