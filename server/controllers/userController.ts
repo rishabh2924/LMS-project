@@ -5,7 +5,7 @@ import { CatchAsyncError } from "../middleware/catchAsyncError";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import ejs from "ejs";
 import path from "path";
-import {v2 as cloudinary}  from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import sendMail from "../utils/sendMail";
 import {
   accessTokenOptions,
@@ -13,7 +13,11 @@ import {
   sendToken,
 } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getAllUsersService, getUserById } from "../services/user.service";
+import {
+  getAllUsersService,
+  getUserById,
+  updateUserRoleService,
+} from "../services/user.service";
 
 require("dotenv").config();
 
@@ -346,19 +350,16 @@ export const updateAvatar = CatchAsyncError(
             url: myCloud.secure_url,
           };
         } else {
-            
-            console.log('here');
-            
-          const myCloud = await cloudinary.uploader
-          .upload(avatar, {
+          console.log("here");
+
+          const myCloud = await cloudinary.uploader.upload(avatar, {
             folder: "avatars",
             width: 150,
             crop: "scale",
-          })
-          
-          console.log('here 2');
-          
-          
+          });
+
+          console.log("here 2");
+
           user.avatar = {
             public_id: myCloud.public_id,
             url: myCloud.secure_url,
@@ -386,7 +387,43 @@ export const getAllUsers = CatchAsyncError(
       getAllUsersService(res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
-      
     }
   }
-)
+);
+
+//update user role -- admin
+export const updateUserRole = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id, role } = req.body;
+      updateUserRoleService(res, id, role);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+//delete user --- admin
+
+export const deleteUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.id;
+
+      const user = await userModel.findById(userId);
+
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
+      await user.deleteOne({ userId });
+      await redis.del(userId);
+
+      res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
