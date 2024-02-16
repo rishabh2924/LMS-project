@@ -10,6 +10,7 @@ import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { IUser } from "../models/userModal";
+import NotificationModel from "../models/notificationModel";
 
 //upload course
 export const uploadCourse = CatchAsyncError(
@@ -193,6 +194,12 @@ export const addQuestion = CatchAsyncError(
 
       courseContent.questions.push(newQuestion as any);
 
+      await NotificationModel.create({
+        userId: req.user?._id,
+        title: "New Question Recieved",
+        message: `You have new question in course ${courseContent?.title}`,
+      });
+
       //save the updated course
       await course?.save();
       res.status(201).json({
@@ -250,6 +257,11 @@ export const addAnswer = CatchAsyncError(
       await course?.save();
       if (req.user?._id === question.user._id) {
         //create notification for admin
+        await NotificationModel.create({
+          userId: req.user?._id,
+          title: "New Question Reply Recieved",
+          message: `You have new question reply in course ${courseContent?.title}`,
+        })
       } else {
         const data = {
           name: question.user.name,
