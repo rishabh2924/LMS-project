@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -8,9 +8,13 @@ import {
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { styles } from "../styles/style";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import toast from "react-hot-toast";
+import {signIn} from "next-auth/react"
 
 type Props = {
   setRoute: (route: string) => void;
+  setOpen: (open: boolean) => void;
 };
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -21,16 +25,31 @@ const schema = Yup.object().shape({
     .min(6, "minimum 6 characters"),
 });
 
-const Login: React.FC<Props> = ({setRoute}) => {
+const Login: React.FC<Props> = ({ setRoute, setOpen }) => {
   const [show, setShow] = useState(false);
+
+  const [login, { isSuccess, error }] = useLoginMutation();
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
-      console.log(email, password);
+      await login({ email, password });
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Login Successful");
+      setOpen(false);
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+      }
+    }
+  }, [isSuccess, error]);
 
   const { errors, touched, values, handleChange, handleSubmit } = formik;
   return (
@@ -74,19 +93,29 @@ const Login: React.FC<Props> = ({setRoute}) => {
           )}
         </div>
         <div className="w-full mt-5">
-            <input type="submit" value="Login" className={`${styles.button}`} />
+          <input type="submit" value="Login" className={`${styles.button}`} />
         </div>
         <br />
         <h5 className="text-center pt-0 font-Poppins text-sm text-black dark:text-white">
-            Or join with
+          Or join with
         </h5>
         <div className="flex items-center justify-center my-3">
-            <FcGoogle size={25} className="cursor-pointer mx-2"/>
-            <AiFillGithub  size={25} className="cursor-pointer mx-2 dark:bg-white rounded-full"/>
+          <FcGoogle size={25} className="cursor-pointer mx-2" 
+          onClick={()=>signIn("google")}/>
+          <AiFillGithub
+            size={25}
+            className="cursor-pointer mx-2 dark:bg-white rounded-full"
+            onClick={() => signIn("github")}
+          />
         </div>
         <h5 className="text-center pt-3 font-Poppins text-sm text-black dark:text-white">
-            Not have any account?
-            <span className="text-[#2190ff] ml-1 cursor-pointer" onClick={() => setRoute("sign-up")}>Sign-up</span>
+          Not have any account?
+          <span
+            className="text-[#2190ff] ml-1 cursor-pointer"
+            onClick={() => setRoute("sign-up")}
+          >
+            Sign-up
+          </span>
         </h5>
       </form>
       <br />
