@@ -11,15 +11,16 @@ export const apiSlice=createApi({
             query:(data)=>({
                 url:"refresh",
                 method:"GET",
-                credentials:"include" as const,
+                credentials:"include" 
             }),
             async onQueryStarted(arg,{queryFulfilled,dispatch}){
                 try{
                     const {data}=await queryFulfilled
                     
+                    
                     dispatch(
                         userLoggedIn({
-                            token:data.token,
+                            token:data.newAccessToken,
                             
                         })
                     )
@@ -33,15 +34,16 @@ export const apiSlice=createApi({
             query:(data)=>({
                 url:"info",
                 method:"GET",
-                credentials:"include" as const,
+                credentials:"include" 
             }),
             async onQueryStarted(arg,{queryFulfilled,dispatch}){
                 try{
                     const {data}=await queryFulfilled
                     
+                    
                     dispatch(
                         userLoggedIn({
-                            
+                            token:data.token,
                             user:data.user
                         })
                     )

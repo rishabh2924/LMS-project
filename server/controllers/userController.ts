@@ -356,15 +356,14 @@ export const updateAvatar = CatchAsyncError(
             url: myCloud.secure_url,
           };
         } else {
-          console.log("here");
-
+         
           const myCloud = await cloudinary.uploader.upload(avatar, {
             folder: "avatars",
             width: 150,
             crop: "scale",
           });
 
-          console.log("here 2");
+          
 
           user.avatar = {
             public_id: myCloud.public_id,
@@ -375,6 +374,8 @@ export const updateAvatar = CatchAsyncError(
 
       await user?.save();
       await redis.set(userId, JSON.stringify(user));
+      
+      
       res.status(201).json({
         success: true,
         user,

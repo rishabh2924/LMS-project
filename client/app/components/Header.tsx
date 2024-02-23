@@ -13,7 +13,7 @@ import { stat } from "fs";
 import Image from "next/image";
 import profile from "../../public/images/Profile.webp"
 import { useSession } from "next-auth/react";
-import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -33,17 +33,21 @@ const Header: FC<Props> = ({open, activeItem, setOpen,route,setRoute }) => {
   const {data}=useSession();
   const [socialAuth,{isSuccess,error}] = useSocialAuthMutation();
 
+  
+
   useEffect(() => {
     if(!user){
       if(data){
         socialAuth({email:data.user?.email,name:data.user?.name, avatar:data.user?.image})
       }
-      if(isSuccess){
-        toast.success("Account created successfully")
-      }
+      
+        if(isSuccess){
+          toast.success("Login successfull")
+        }
+        
+      
     }
-    
-    
+   
   },[data,user])
 
 
@@ -90,19 +94,26 @@ const Header: FC<Props> = ({open, activeItem, setOpen,route,setRoute }) => {
                   onClick={() => setOpenSidebar(!openSidebar)}
                 />
               </div>
+              
               {
+                
+                
                 user?(
-                  <>
-                  <Image src={user.avatar? user.avatar:profile} alt=""  height={30} width={30} className="w-[30px] h-[30px] rounded-full cursor-pointer "/>
+                  <Link href={"/profile"}>
+                 <>
+                  <Image src={user.avatar? user.avatar.url:profile} alt=""  height={30} width={30} className="w-[30px] h-[30px] rounded-full cursor-pointer "/>
                   </>
+                  </Link>
                 ):(
                   <HiOutlineUserCircle
                   size={25}
                   className="hidden 800px:block cursor-pointer dark:text-white text-black "
                   onClick={() => setOpen(true)}
                 />
+                 
                 )
               }
+             
              
             </div>
           </div>
