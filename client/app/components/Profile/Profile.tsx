@@ -4,6 +4,7 @@ import { useLogOutQuery } from "@/redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 import ProfileInfo from './ProfileInfo'
+import ChangePassword from './ChangePassword'
 
 
 type Props = {
@@ -42,7 +43,10 @@ const Profile: FC<Props> = ({ user }) => {
         
       </div>
       {active=== 1 && (
-          <ProfileInfo/>
+          <ProfileInfo email={user.email} userName={user.name}/>
+        )}
+      {active=== 2 && (
+          <ChangePassword  setActive={setActive}/>
         )}
     </div>
   );

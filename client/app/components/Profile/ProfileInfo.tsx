@@ -2,18 +2,26 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useUpdateAvatarMutation } from '@/redux/features/user/userApi';
+import { useEditProfileMutation, useUpdateAvatarMutation } from '@/redux/features/user/userApi';
 import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
-const ProfileInfo: React.FC = () => {
-  const [name, setName] = useState('John Doe');
-  const [email] = useState('john@example.com'); // Email is read-only
+type Props = {
+  email: string;
+  userName:string;
+};
+
+const ProfileInfo: React.FC<Props> = ({email,userName}) => {
+  
+  const [name, setName] = useState(userName);
+   // Email is read-only
   const [loadUser,setLoadUser]=useState(false);
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [updateAvatar,{isSuccess,error}]= useUpdateAvatarMutation();
+  const [editProfile,{isSuccess:editProfileSuccess,error:editProfileError}]=useEditProfileMutation()
 
   const {} = useLoadUserQuery(undefined,{skip:!loadUser?true:false})
-
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -35,20 +43,23 @@ const ProfileInfo: React.FC = () => {
     }
   };
   useEffect(() => {
-    if(isSuccess){
+    if(isSuccess || editProfileSuccess){
         setLoadUser(true)
     }
-    if(error){
-        console.log(error);
-        
+    if(error || editProfileError){
+        console.log(error,editProfileError)
     }
-  },[isSuccess])
+    
+  },[isSuccess,editProfileSuccess,error,editProfileError])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission, e.g., update name and profile picture
-    console.log('Updated name:', name);
-    console.log('Updated profile picture:', profilePic);
+    if(name!==""){
+       await editProfile({name,
+        email:email})
+        toast.success("Profile updated successfully")
+    }
+    
   };
 
   return (
@@ -126,6 +137,7 @@ const ProfileInfo: React.FC = () => {
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          
         >
           Submit
         </button>
