@@ -220,11 +220,7 @@ export const updateAccessToken = CatchAsyncError(
         user._id,JSON.stringify(user),"EX",60 * 60 * 24 * 7
       )
 
-      res.status(200).json({
-        status: "success",
-        newAccessToken,
-        
-      });
+      next();
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }

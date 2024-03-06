@@ -10,7 +10,7 @@ type Props = {};
 const page = (props: Props) => {
   return (
     <div>
-      {/* <AdminProtected> */}
+      <AdminProtected>
         <Heading
           title="Admin"
           description="Admin dashboard"
@@ -18,7 +18,7 @@ const page = (props: Props) => {
         />
 
         
-      {/* </AdminProtected> */}
+      </AdminProtected>
     </div>
   );
 };

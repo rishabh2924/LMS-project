@@ -2,10 +2,12 @@ import express from "express";
 import { authorizeRoles, isAuthenticated } from "../middleware/auth";
 import { addAnswer, addQuestion, addReplyToReview, addReview, deleteCourse, editCourse, generateVideoUrl, getAllCourses, getAllCoursesAdmin, getCourseContent, getSignleCourse, uploadCourse } from "../controllers/courseController";
 import { generateKey } from "crypto";
+import { updateAccessToken } from "../controllers/userController";
 const courseRouter = express.Router();
 
 courseRouter.post(
   "/create-course",
+  updateAccessToken,
   isAuthenticated,
   authorizeRoles("admin"),
   uploadCourse
