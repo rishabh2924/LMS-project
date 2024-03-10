@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HiUser, HiDocumentText, HiCollection, HiPencilAlt, HiDesktopComputer, HiLightBulb, HiChartBar, HiCog, HiLogout, HiMenuAlt4 } from 'react-icons/hi';
+import { HiUser, HiDocumentText, HiCollection, HiPencilAlt, HiDesktopComputer, HiLightBulb, HiChartBar, HiCog, HiLogout, HiMenuAlt4, HiUserGroup } from 'react-icons/hi';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -31,10 +31,12 @@ const AdminSidebar = ({collapsed, setCollapsed}:props) => {
 
         {/* Data section */}
         <div className="p-2">
+          <Link href={'/admin/users'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiUser className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Users</span>}
           </button>
+          </Link>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiDocumentText className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Invoices</span>}
@@ -49,10 +51,23 @@ const AdminSidebar = ({collapsed, setCollapsed}:props) => {
             {!collapsed && <span className="text-sm">Create Course</span>}
           </button>
           </Link>
+          <Link href={'/admin/all-courses'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiDesktopComputer className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Live Course</span>}
           </button>
+          </Link>
+        </div>
+
+        {/* Management */}
+        <div className="p-2">
+          <Link href={'/admin/manage-team'}>
+          <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
+            <HiUserGroup className="w-6 h-6 mr-2" />
+            {!collapsed && <span className="text-sm">Manage Team</span>}
+          </button>
+          </Link>
+          
         </div>
 
         {/* Custom section */}
