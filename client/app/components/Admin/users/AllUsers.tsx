@@ -28,7 +28,7 @@ const AllUsers = ({ isTeam }: Props) => {
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState("");
 
-  const { isLoading, data, error } = useGetAllUsersQuery({});
+  const { isLoading, data, error ,refetch} = useGetAllUsersQuery({},{refetchOnMountOrArgChange:true});
   const [updateUserRole,{error:updateError,isSuccess }]= useUpdateUserRoleMutation()
 
   const [deleteUser,{error:deleteError,isSuccess:deleteSuccess}]= useDeleteUserMutation()
@@ -36,10 +36,12 @@ const AllUsers = ({ isTeam }: Props) => {
 
   useEffect(() => {
       if(isSuccess){
+        refetch()
         toast.success("Role updated successfully")
         setActive(false)
       }
       if(deleteSuccess){
+        refetch()
         toast.success("User deleted successfully")
         setOpen(false);
       }
