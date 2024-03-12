@@ -12,6 +12,7 @@ type Props = {
   setActive: (active: number) => void;
 };
 
+
 const CourseData = ({
   benefits,
   setBenefits,

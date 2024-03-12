@@ -72,14 +72,18 @@ const AdminSidebar = ({collapsed, setCollapsed}:props) => {
 
         {/* Custom section */}
         <div className="p-2">
+          <Link href={'/admin/hero'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiLightBulb className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Hero</span>}
           </button>
+          </Link>
+          <Link href={'/admin/faq'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiDocumentText className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">FAQ</span>}
           </button>
+          </Link>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiCollection className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Categories</span>}

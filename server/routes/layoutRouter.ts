@@ -12,12 +12,11 @@ layoutRouter.post(
 );
 layoutRouter.put(
   "/edit-layout",
-  isAuthenticated,
-  authorizeRoles("admin"),
+  
   editLayout
 );
 layoutRouter.get(
-  "/get-layout",
+  "/get-layout/:type",
   getLayoutByType
 );
 

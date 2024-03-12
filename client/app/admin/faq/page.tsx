@@ -1,3 +1,5 @@
+'use client'
+import EditFaq from '@/app/components/Admin/Customisation/EditFaq'
 import React from 'react'
 
 type Props = {}
@@ -5,7 +7,7 @@ type Props = {}
 const page = (props: Props) => {
   return (
     <div>
-        Edit Course
+        <EditFaq/>
     </div>
   )
 }
