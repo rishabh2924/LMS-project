@@ -84,10 +84,12 @@ const AdminSidebar = ({collapsed, setCollapsed}:props) => {
             {!collapsed && <span className="text-sm">FAQ</span>}
           </button>
           </Link>
+          <Link href={'/admin/categories'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiCollection className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Categories</span>}
           </button>
+          </Link>
         </div>
 
         {/* Analytics section */}
