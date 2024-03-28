@@ -10,15 +10,15 @@ type Props = {};
 const page = (props: Props) => {
   return (
     <div>
-      <AdminProtected>
+      {/* <AdminProtected> */}
         <Heading
           title="Admin"
           description="Admin dashboard"
           keywords="elearning,MERN,Programing, learning, online"
         />
-
+        <DashboardHero isDashboard={true}/>
         
-      </AdminProtected>
+      {/* </AdminProtected> */}
     </div>
   );
 };

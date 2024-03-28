@@ -1,13 +1,21 @@
 import React from 'react'
 import DashboardHeader from './DashboardHeader'
+import DashboardWidgets from './widegets/DashboardWidgets';
 
-type Props = {}
+type Props = {
+  isDashboard?: boolean;
+}
 
-const DashboardHero = (props: Props) => {
+const DashboardHero = ({isDashboard}: Props) => {
+  const [open , setOpen] = React.useState(false)
   return (
-    <div className=''>
-        <DashboardHeader/>
-    </div>
+    <>
+    {
+      isDashboard && (
+        <DashboardWidgets open= {open}/>
+      )
+    }
+    </>
   )
 }
 

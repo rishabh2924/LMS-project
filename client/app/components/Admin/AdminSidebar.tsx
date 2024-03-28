@@ -37,10 +37,12 @@ const AdminSidebar = ({collapsed, setCollapsed}:props) => {
             {!collapsed && <span className="text-sm">Users</span>}
           </button>
           </Link>
+          <Link href={'/admin/invoices'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiDocumentText className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Invoices</span>}
           </button>
+          </Link>
         </div>
 
         {/* Content section */}
@@ -94,18 +96,24 @@ const AdminSidebar = ({collapsed, setCollapsed}:props) => {
 
         {/* Analytics section */}
         <div className="p-2">
+          <Link href={'/admin/course-analytics'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiChartBar className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Courses Analytics</span>}
           </button>
+          </Link>
+          <Link href={'/admin/order-analytics'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiChartBar className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">Order Analytics</span>}
           </button>
+          </Link>
+          <Link href={'/admin/user-analytics'}>
           <button className="w-full flex items-center py-2 mb-2 bg-blue-800 text-white rounded">
             <HiChartBar className="w-6 h-6 mr-2" />
             {!collapsed && <span className="text-sm">User Analytics</span>}
           </button>
+          </Link>
         </div>
       </div>
 
