@@ -1,3 +1,4 @@
+import { idID } from "@mui/material/locale";
 import { apiSlice } from "../api/apiSlice";
 
 export const coursesApi = apiSlice.injectEndpoints({
@@ -31,6 +32,13 @@ export const coursesApi = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    getCourseDetails: builder.query({
+      query: (id) => ({
+        url: `get-course/${id}` ,
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 export const {
@@ -38,4 +46,5 @@ export const {
   useGetAllCoursesQuery,
   useDeleteCourseMutation,
   useGetUsersAllCoursesQuery,
+  useGetCourseDetailsQuery
 } = coursesApi;

@@ -13,7 +13,8 @@ const Courses = (props: Props) => {
         setCourses(data?.courses)
     },[data])
 
-console.log(courses);
+
+
 
 
   return (

@@ -5,6 +5,9 @@ import Heading from './utils/Heading'
 import Header from './components/Header'
 import Hero from './components/Route/Hero'
 import Courses from './components/Route/Courses'
+import Reviews from './components/Route/Reviews'
+import FAQ from './components/Route/FAQ'
+import Footer from './components/Route/Footer'
 
 interface Props{}
 
@@ -26,6 +29,9 @@ const Page:FC<Props> = (props) => {
       <Header open={open} setOpen={setOpen} route={route} setRoute={setRoute} activeItem={activeItem}/>
       <Hero imageUrl={exampleImageUrl} text={exampleText}/>
       <Courses/>
+      <Reviews/>
+      <FAQ/>
+      <Footer/>
     </div>
   )
 }

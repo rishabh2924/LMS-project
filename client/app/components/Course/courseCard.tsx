@@ -12,10 +12,11 @@ type Props = {
 
 
 const CourseCard = ({item,key,isProfile}: Props) => {
-    console.log(item.thumbnail);
+    
+    
     
   return (
-    <Link href={!isProfile ?'/courses/${item._id}':'/course-access/${item._id}'}>
+    <Link href={!isProfile ?`/courses/${item._id}`:`/course-access/${item._id}`}>
         <div className="w-full min-h-[35vh] dark:bg-slate-500 dark:bg-opacity-20 backdrop-blur border dark:border-[#ffffff1d] border-[#00000015] dark:shadow-[bg-slate-700] rounded-lg p-3 shadow-sm dark:shadow-inner ">
            <Image src={item.thumbnail?.url} alt="course thumbnail" width={500} height={300} objectFit='contain'  className="rounded w-full" /> 
            <br />

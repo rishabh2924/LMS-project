@@ -5,6 +5,8 @@ import React from 'react'
 type Props = {}
 
 const page = ({params}:any) => {
+
+  
   return (
     <div>
         <CourseDetailPage id={params.id}/>
