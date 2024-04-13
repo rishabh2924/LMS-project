@@ -22,7 +22,6 @@ const Footer = (props: Props) => {
                 >
                   Our Story
                 </Link>
-                www
               </li>
               <li>
                 <Link
