@@ -100,7 +100,7 @@ const CreateCourse = (props: Props) => {
     
     if (!isLoading) {
       try {
-        await createCourse(data);
+        await createCourse({data});
       } catch (error) {
         toast.error("Something went wrong, please try again later");
       }

@@ -46,7 +46,7 @@ const CourseContentList:FC<Props> = ( props) => {
         totalCount +=sectionVideoCount;
         const sectionContentHours:number= sectionVideoLength/60;
         return (
-          <div className={`${!props.isDemo && 'border-b border-white pb-2'}  `} key={section}>
+          <div className={`${!props.isDemo && 'border-b dark:border-white border-black  pb-2'}  `} key={section}>
             <div className="w-full flex">
               <div className="w-full flex justify-between items-center">
                 <h2 className='text-[20px] text-black dark:text-white' onClick={()=>toggleSection(section)}>
@@ -73,7 +73,7 @@ const CourseContentList:FC<Props> = ( props) => {
                   const videoIndex:number= sectionStartIndex + index;
                   const contentLength:number = item.videoLength/60;
                   return (
-                    <div className={`w-full ${videoIndex===props.activeVideo?'bg-slate-800':""} cursor-pointer transition-all p-2`} key={item._id} onClick={()=>props.isDemo?null: props?.setActiveVideo(videoIndex)} >
+                    <div className={`w-full ${videoIndex===props.activeVideo?'dark:bg-slate-800 bg-gray-300':""} cursor-pointer transition-all p-2`} key={item._id} onClick={()=>props.isDemo?null: props?.setActiveVideo(videoIndex)} >
                       <div className="flex items-start">
                         <div className="">
                           <MdOutlineOndemandVideo size={25} className="mr-2" color= "#1cdada" />

@@ -3,13 +3,12 @@ import Ratings from "@/app/utils/Ratings";
 import Link from "next/link";
 import React, { useState } from "react";
 import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
-import { UseSelector } from "react-redux";
 import { format } from "timeago.js";
 import { styles } from "../styles/style";
 import CourseContentList from "./CourseContentList";
 import {Elements} from "@stripe/react-stripe-js";
 import CheckOutForm from "../Payment/CheckOutForm"
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
 type Props = {
   data: any;
@@ -18,9 +17,8 @@ type Props = {
 };
 
 const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
-  console.log(data);
-
-  const user = useSelector((state: any) => state.auth);
+const {data:userData}= useLoadUserQuery({})
+const user= userData?.user
   const [open, setOpen] = useState(false);
   const discountPercentage =
     ((data?.estimatedPrice - data.price) / data?.estimatedPrice) * 100;
@@ -28,6 +26,8 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
 
   const isPurchased =
     user && user?.courses?.find((item: any) => item._id === data._id);
+   
+    
   const handleOrder = (e: any) => {
     setOpen(true);
   };
@@ -112,7 +112,7 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
                 </h5>
               </div>
               <br />
-              {data?.reviews &&
+              {(data?.reviews.length  )&&
                 [...data?.reviews].reverse().map((item: any, index: number) => {
                   return (
                     <div className="w-full pb-4" key={index}>
@@ -120,7 +120,7 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
                         <div className="w-[50px] h-[50px] ">
                           <div className="w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer ">
                             <h1 className="uppercase text-lg text-black dark:text-white">
-                              {item.user.name.slice(0, 2)}
+                              {item?.user?.name?.slice(0, 2)}
                             </h1>
                           </div>
                         </div>

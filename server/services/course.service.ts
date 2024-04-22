@@ -7,6 +7,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 //create course
 export const createCourse= CatchAsyncError(async(data:any,res:Response)=>{
 
+   console.log("createCourse", data);
    
     
     const course= await CourseModel.create(data);

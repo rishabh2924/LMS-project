@@ -19,6 +19,7 @@ export const uploadCourse = CatchAsyncError(
     try {
       const data = req.body;
       
+    console.log("coursecontroller", data);
     
       
       const thumbnail = data.thumbnail;
@@ -80,8 +81,12 @@ export const getSignleCourse = CatchAsyncError(
     try {
       const courseId = req.params.id;
       const isCacheExist = await redis.get(courseId);
+      console.log(isCacheExist);
+      
       if (isCacheExist) {
         const course = JSON.parse(isCacheExist);
+        console.log('course', course);
+        
         return res.status(200).json({
           success: true,
           course,
@@ -130,6 +135,8 @@ export const getAllCourses = CatchAsyncError(
 export const getCourseContent = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+     
+      
       const userCourseList = req.user?.courses;
       const courseId = req.params.id;
       const courseExist = userCourseList?.find(
@@ -139,6 +146,8 @@ export const getCourseContent = CatchAsyncError(
         return next(new ErrorHandler("Course not found", 404));
       }
       const course = await CourseModel.findById(courseId);
+      
+      
       const content = course?.courseData;
       res.status(200).json({
         success: true,
@@ -249,6 +258,8 @@ export const addAnswer = CatchAsyncError(
       const newAnswer: any = {
         user: req.user,
         answer,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       question.questionReplies.push(newAnswer);
@@ -329,11 +340,16 @@ export const addReview = CatchAsyncError(
         course.rating = avg / course?.reviews.length;
       }
       await course?.save();
-      const notification = {
-        title: "New Review Recieved",
-        message: `${req.user?.name} has given a review on ${course?.name}`,
-      };
+      await redis.set(courseId, JSON.stringify(course),"EX", 60 * 60 * 24*7);
+     
       //create notification here
+
+      await NotificationModel.create({
+        userId: req.user?._id,
+        title:"New Review Recieved",
+        message: `${req.user?.name} has given a review on ${course?.name}`,
+      });
+
       res.status(200).json({
         success: true,
         course,
@@ -368,6 +384,8 @@ export const addReplyToReview = CatchAsyncError(
       const replyData: any = {
         user: req.user,
         comment,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
       if(!review.commentReplies) {
         review.commentReplies = [];
