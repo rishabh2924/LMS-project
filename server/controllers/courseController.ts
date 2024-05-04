@@ -391,6 +391,8 @@ export const addReplyToReview = CatchAsyncError(
         review.commentReplies = [];
       }
      review.commentReplies.push(replyData);
+      await course?.save();
+      await redis.set(courseId, JSON.stringify(course),"EX", 60 * 60 * 24*7);
       res.status(200).json({
         success: true,
         course,

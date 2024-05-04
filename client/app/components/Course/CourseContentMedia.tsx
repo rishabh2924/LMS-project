@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import {
   useAddAnswerInQuestionMutation,
   useAddNewQuestionMutation,
+  useAddReplyInReviewMutation,
   useAddReviewInCourseMutation,
   useGetCourseDetailsQuery,
 } from "@/redux/features/courses/coursesApi";
@@ -45,6 +46,8 @@ const CourseContentMedia = ({
   const [answer, setAnswer] = useState("");
   const [questionId, setQuestionId] = useState("");
   const [isReviewReply, setIsReviewReply] = useState(false);
+  const [reply, setReply] = useState("");
+  const [reviewId, setReviewId] = useState("");
 
   const [
     addNewQuestion,
@@ -68,6 +71,9 @@ const CourseContentMedia = ({
       isloading: reviewCreationLoading,
     },
   ] = useAddReviewInCourseMutation();
+
+  const [addReplyInReview, { isSuccess: replySuccess, error: replyError }] =
+    useAddReplyInReviewMutation();
 
   const { data: courseData, refetch: refetchCourse } = useGetCourseDetailsQuery(
     id,
@@ -116,6 +122,18 @@ const CourseContentMedia = ({
     }
   };
 
+  const handleReviewReplySubmit = async () => {
+    if (reply === "") {
+      toast.error("Reply cannot be empty");
+    } else {
+      addReplyInReview({
+        comment: reply,
+        reviewId: reviewId,
+        courseId: id,
+      });
+    }
+  };
+
   useEffect(() => {
     if (isSuccess) {
       setQuestion("");
@@ -152,6 +170,17 @@ const CourseContentMedia = ({
         toast.error(errorMessage.message);
       }
     }
+    if (replySuccess) {
+      setReply("");
+      refetchCourse();
+      toast.success("Reply added successfully");
+    }
+    if (replyError) {
+      if ("data" in replyError) {
+        const errorMessage = replyError.data as any;
+        toast.error(errorMessage.message);
+      }
+    }
   }, [
     isSuccess,
     error,
@@ -161,6 +190,8 @@ const CourseContentMedia = ({
     reviewSuccess,
     reviewError,
     refetchCourse,
+    replySuccess,
+    replyError,
   ]);
 
   return (
@@ -383,21 +414,59 @@ const CourseContentMedia = ({
                       {user.role === "admin" && (
                         <span
                           className={`${styles.label} flex mt-2 cursor-pointer ml-10`}
-                          onClick={() => setIsReviewReply(!isReviewReply)}
+                          onClick={() => {
+                            setIsReviewReply(!isReviewReply),
+                              setReviewId(item._id);
+                          }}
                         >
                           Add Reply
                         </span>
                       )}
                       {isReviewReply && (
                         <div className="w-full flex relative">
-                        <input
-                          type="text"
-                          placeholder="Enter your Reply"
-                          className={`${styles.input} border-[0px] rounded-none w-[90%] ml-[3%] !border-b `}
-                        />
-                        <button type="submit" className="absolute right-0 bottom-1">submit</button>
+                          <input
+                            type="text"
+                            value={reply}
+                            onChange={(e) => setReply(e.target.value)}
+                            placeholder="Enter your Reply"
+                            className={`${styles.input} border-[0px] rounded-none w-[90%] ml-[3%] !border-b `}
+                          />
+                          <button
+                            type="submit"
+                            className="absolute right-0 bottom-1"
+                            onClick={handleReviewReplySubmit}
+                          >
+                            submit
+                          </button>
                         </div>
                       )}
+
+                      {item.commentReplies.map((i: any, index: number) => (
+                        <>
+                          <div className="w-full flex 800px:ml-16 my-5">
+                            <div className="w-[50px] h-[50px]">
+                              <Image
+                                src={
+                                  i.user.avatar
+                                    ? i.user.avatar.url
+                                    : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
+                                }
+                                width={50}
+                                height={50}
+                                alt=""
+                                className="w-[50px] h-[50px] rounded-full object-cover"
+                              />
+                            </div>
+                            <div className="pl-2">
+                              <h5 className="text-[20px]">{i.user.name}</h5>
+                              <p>{i.comment}</p>
+                              <small className="text-[#ffffff83]">
+                                {format(i.createdAt)} •
+                              </small>
+                            </div>
+                          </div>
+                        </>
+                      ))}
                     </div>
                   </>
                 )
