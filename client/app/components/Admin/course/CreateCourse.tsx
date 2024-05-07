@@ -96,7 +96,7 @@ const CreateCourse = (props: Props) => {
   };
   const handleCourseCreate = async () => {
     const data = courseData;
-    console.log(data);
+  
     
     if (!isLoading) {
       try {

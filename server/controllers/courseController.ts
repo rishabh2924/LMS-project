@@ -19,7 +19,7 @@ export const uploadCourse = CatchAsyncError(
     try {
       const data = req.body;
       
-    console.log("coursecontroller", data);
+   
     
       
       const thumbnail = data.thumbnail;
@@ -81,11 +81,11 @@ export const getSignleCourse = CatchAsyncError(
     try {
       const courseId = req.params.id;
       const isCacheExist = await redis.get(courseId);
-      console.log(isCacheExist);
+    
       
       if (isCacheExist) {
         const course = JSON.parse(isCacheExist);
-        console.log('course', course);
+       
         
         return res.status(200).json({
           success: true,

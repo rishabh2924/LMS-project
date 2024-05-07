@@ -9,6 +9,7 @@ import Reviews from './components/Route/Reviews'
 import FAQ from './components/Route/FAQ'
 import Footer from './components/Route/Footer'
 
+
 interface Props{}
 
 const exampleImageUrl = '/images/hero.webp';

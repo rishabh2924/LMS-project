@@ -201,7 +201,7 @@ const user= userData?.user
                 {
                   stripePromise && clientSecret && (
                     <Elements stripe={stripePromise} options={{clientSecret}}>
-                      <CheckOutForm setOpen={setOpen} data={data}/>
+                      <CheckOutForm setOpen={setOpen} data={data}  user={user}/>
                     </Elements>
                   )
                 }
